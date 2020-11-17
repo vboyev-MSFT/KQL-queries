@@ -1,0 +1,5 @@
+//TVM basic query for CVE
+//replace xxxx and yyyy apropriately
+DeviceTvmSoftwareInventoryVulnerabilities
+| where CveId == 'CVE-2020-xxxx' and CveId =='CVE-2020-yyyy'
+| project DeviceId,DeviceName, OSVersion
