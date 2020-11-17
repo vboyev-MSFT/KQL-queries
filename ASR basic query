@@ -1,0 +1,3 @@
+// A Basic query for ASR related events
+DeviceEvents
+| where ActionType startswith "ASR"
