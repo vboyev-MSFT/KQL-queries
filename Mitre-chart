@@ -1,4 +1,4 @@
-// Chart alerts mapped to MITRE categories
+// Chart alerts mapped to MITRE categories - use in M365 Defender AH
 AlertInfo
 | summarize count() by Category , AttackTechniques
 | render piechart 
