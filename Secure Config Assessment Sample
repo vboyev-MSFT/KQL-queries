@@ -1,0 +1,20 @@
+//Secure Configuration Assessment - return per each machine in the organization: is MDAV enabled, is real time //protection enabled, is latest AV signature, is AV cloud protection enabled, Is Tamper Protection enabled, is email //scanning enabled. This is obviously not limited to be used just for AV related configurations that were used in this //example, and can be extended to include any security control configuration being assessed by TVM.
+ 
+DeviceTvmSecureConfigurationAssessment
+| where ConfigurationId in ('scid-2010','scid-2011','scid-2012','scid-2013','scid-2016','scid-2003', 'scid-90')
+| extend IsAvEnabled=iif(ConfigurationId == "scid-2010" and IsCompliant==1, 1, 0), 
+        IsRealtimeProtectionEnabled=iif(ConfigurationId == "scid-2012" and IsCompliant==1, 1, 0),
+        IsAVSignatureLatest=iif(ConfigurationId == "scid-2011" and IsCompliant==1, 1, 0), 
+        IsPuaEnabled=iif(ConfigurationId == "scid-2013" and IsCompliant==1, 1, 0), 
+        IsCloudProtectionEnabled=iif(ConfigurationId == "scid-2016" and IsCompliant==1, 1, 0), 
+        IsTamperProtectionEnabled=iif(ConfigurationId == "scid-2003" and IsCompliant==1, 1, 0), 
+        IsEmailScanningEnabled=iif(ConfigurationId == "scid-90" and IsCompliant==1, 1, 0) 
+| summarize DeviceName=any(DeviceName),
+            IsAvEnabled=max(IsAvEnabled), 
+            IsRealtimeProtectionEnabled=max(IsRealtimeProtectionEnabled), 
+            IsAVSignatureLatest=max(IsAVSignatureLatest), 
+            IsPuaEnabled=max(IsPuaEnabled), 
+            IsCloudProtectionEnabled=max(IsCloudProtectionEnabled),  
+            IsTamperProtectionEnabled=max(IsTamperProtectionEnabled),
+            IsEmailScanningEnabled = max(IsEmailScanningEnabled)
+            by DeviceId
