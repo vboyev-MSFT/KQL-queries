@@ -1,4 +1,5 @@
 // Chart alerts mapped to MITRE categories
 AlertInfo
 | summarize count() by Category , AttackTechniques
+| render piechart 
 // Change to PIE Chart
