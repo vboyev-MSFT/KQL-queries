@@ -1,0 +1,4 @@
+      // The ASR rules have a dedicated reporting portal at https://security.microsoft.com . 
+      // However, no such report exists for other W10 security features - this would be a query for any Network Protection related activity
+DeviceEvents
+| where ActionType startswith "ExploitGuardNetwork"
