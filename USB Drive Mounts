@@ -1,0 +1,7 @@
+DeviceEvents
+| where ActionType=="UsbDriveMount"
+|project InitiatingProcessAccountUpn, AccountDomain, AccountSid, DeviceId, DeviceName, AdditionalFields, Timestamp
+| extend ParsedFields=parse_json(AdditionalFields)
+| project InitiatingProcessAccountUpn, AccountSid, AccountDomain,DeviceId, DeviceName, DriveLetter=ParsedFields.DriveLetter, MountTime=Timestamp,
+ ProductName=ParsedFields.ProductName,SerialNumber=ParsedFields.SerialNumber,Manufacturer=ParsedFields.Manufacturer
+| order by DeviceId asc, MountTime desc;
