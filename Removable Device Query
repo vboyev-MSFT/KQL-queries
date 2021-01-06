@@ -1,0 +1,12 @@
+DeviceEvents
+| where Timestamp > ago(30d)
+| where ActionType == 'PnpDeviceConnected'
+| extend parsed=parse_json(AdditionalFields)
+| extend
+    DeviceDescription=tostring(parsed.DeviceDescription),
+    ClassName=tostring(parsed.ClassName),
+    DeviceId=tostring(parsed.DeviceId),
+    VendorIds=tostring(parsed.VendorIds),
+    Id = strcat(DeviceId, ' ', DeviceName, ' ', tostring(parsed.DeviceId))
+| project Timestamp, DeviceId, DeviceName, ActionType, DeviceDescription, ClassName, VendorIds, Id 
+| limit 1000
