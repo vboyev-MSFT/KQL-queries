@@ -1,0 +1,5 @@
+//Reporting on Network Protection Blocks - contributed by John Barbare
+DeviceEvents
+| where ActionType contains "ExploitGuardNetworkProtection"
+| extend ParsedFields=parse_json(AdditionalFields)
+| project DeviceName, ActionType, Timestamp, RemoteUrl, InitiatingProcessFileName, IsAudit=tostring(ParsedFields.IsAudit), ResponseCategory=tostring(ParsedFields.ResponseCategory), DisplayName=tostring(ParsedFields.DisplayName)
