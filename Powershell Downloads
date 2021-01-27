@@ -1,5 +1,4 @@
-//Finds powershell execution events that may involve downloading
-// Finds PowerShell execution events that could involve a download.
+//Intention is to identify powershell execution events that may involve downloading 
 DeviceProcessEvents
 | where Timestamp > ago(7d)
 | where FileName in~ ("powershell.exe", "powershell_ise.exe")
