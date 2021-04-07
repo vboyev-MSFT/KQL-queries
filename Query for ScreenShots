@@ -1,2 +1,2 @@
 DeviceEvents
-| where ActionType == "ScreenShot"
+| where ActionType == "ScreenShotTaken"
