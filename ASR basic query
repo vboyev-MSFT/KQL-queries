@@ -1,3 +1,4 @@
-// A Basic query for ASR related events
 DeviceEvents
-| where ActionType startswith "ASR"
+| where ActionType startswith 'Asr'
+| extend ParsedFields=parse_json(AdditionalFields)
+|project DeviceId, DeviceName,AccountDomain,AccountName,ActionType,ProcessCommandLine, FolderPath, SHA256,InitiatingProcessFileName,InitiatingProcessFolderPath,InitiatingProcessCommandLine, RuleId=ParsedFields.RuleId, ParsedFields.IsAudit
