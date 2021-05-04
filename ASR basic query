@@ -1,4 +1,4 @@
 DeviceEvents
 | where ActionType startswith 'Asr'
 | extend ParsedFields=parse_json(AdditionalFields)
-|project DeviceId, DeviceName,AccountDomain,AccountName,ActionType,ProcessCommandLine, FolderPath, SHA256,InitiatingProcessFileName,InitiatingProcessFolderPath,InitiatingProcessCommandLine, RuleId=ParsedFields.RuleId, ParsedFields.IsAudit
+|project TimeStamp, DeviceId, DeviceName,AccountDomain,AccountName,ActionType,ProcessCommandLine, FolderPath, SHA256,InitiatingProcessFileName,InitiatingProcessFolderPath,InitiatingProcessCommandLine, RuleId=ParsedFields.RuleId, ParsedFields.IsAudit
