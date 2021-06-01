@@ -1,0 +1,9 @@
+EmailEvents
+|where EmailDirection == "Inbound"
+//Line 4 - filter for Public Folder related traffic -this will be unique per tenant
+//| where RecipientEmailAddress !in ("secondaryhierarchy_939696f8@vtechnologies.onmicrosoft.com", "hierarchy_aa1957ba@vtechnologies.onmicrosoft.com")
+| where ConfidenceLevel != @"{""Spam"":""Not spam""}"
+//Filter internal routing domain email out
+| where SenderFromDomain != "vtechnologies.onmicrosoft.com"
+//These fields should show if there is an Mail Rule or Safelist entry for the message - for some reason - the kql does not filter if they are NullValues
+|where isnotnull(EmailActionPolicy) or isnotnull(EmailAction) or isnotnull (EmailActionPolicyGuid)  or isnotnull (OrgLevelAction) or isnotnull (OrgLevelPolicy)
