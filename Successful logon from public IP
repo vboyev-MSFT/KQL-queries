@@ -1,0 +1,5 @@
+DeviceLogonEvents
+| where ActionType == "LogonSuccess"
+//|summarize count() by DeviceName, AccountName
+| where RemoteIPType == "Public"
+| summarize count() by  DeviceName, AccountName,RemoteI
