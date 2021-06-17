@@ -1,0 +1,9 @@
+DeviceEvents | where ActionType=="UserAccountAddedToLocalGroup"
+| where AdditionalFields contains "S-1-5-32-544"
+//only the added Accounts’s SID is shown, for synced AD Accounts you can do a join (misses local and nonsynced accounts)
+| join
+(
+IdentityInfo
+)
+on $left.AccountSid== $right.OnPremSid
+|project DeviceName, AdditionalFields, kikerultbele=AccountUpn, kiraktabele=InitiatingProcessAccountName
