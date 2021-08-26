@@ -1,0 +1,18 @@
+let duration = totimespan(600m); //update this number of minutes in the future you want to check for WMIC and PSexec commands 
+
+AlertInfo 
+| where Timestamp > ago(7d)  
+| where ServiceSource == "Microsoft Defender for Identity" 
+| where Title == "Remote code execution attempt" 
+| project AlertId, AlertTime = Timestamp, Title 
+| join (AlertEvidence) on AlertId 
+| where EvidenceDirection == "Source" and EntityType == "Machine" 
+| project AlertId, AlertTime, DeviceId, DeviceName, UpdateTime = Timestamp, Title 
+| join (DeviceProcessEvents 
+| where FileName == "WMIC.exe" or FileName == "PsExec.exe" 
+| project ProcessTime = Timestamp, ProcessCommandLine, FileName, FolderPath, DeviceName, DeviceId) on DeviceId 
+| where ProcessTime - UpdateTime between (-2m .. duration) 
+// | where ProcessTime >= AlertTime 
+| project AlertId, AlertTime, ProcessTime, UpdateTime,Title, DeviceName, FolderPath, ProcessCommandLine, FileName 
+| sort by ProcessTime desc 
+//source: https://techcommunity.microsoft.com/t5/security-compliance-and-identity/enhancing-microsoft-defender-for-identity-data-using-microsoft/ba-p/2178286
