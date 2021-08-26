@@ -1,0 +1,11 @@
+let firstIndexof = (input:string, lookup: string) { 
+    indexof(input, lookup, 0, -1) 
+}; 
+
+IdentityLogonEvents 
+| where LogonType == "LDAP cleartext" and ActionType == "LogonSuccess" 
+| extend DomainName = substring(DestinationDeviceName, firstIndexof(DestinationDeviceName, '.') + 1) 
+| where DomainName == "contoso.azure" // replace contoso.azure with your domain name.  
+| summarize NumberOfEntries=count()by LogonType, ActionType, AccountDisplayName, DomainName, AccountSid, IPAddress, DeviceName, DC = DestinationDeviceName 
+| sort by AccountDisplayName  
+// original from https://techcommunity.microsoft.com/t5/security-compliance-and-identity/enhancing-microsoft-defender-for-identity-data-using-microsoft/ba-p/2178286
