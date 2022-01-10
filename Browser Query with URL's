@@ -1,0 +1,11 @@
+DeviceNetworkEvents
+| where 
+    // Edge
+    InitiatingProcessFileName == @"msedge.exe" 
+    // Internet Explorer x64
+    or InitiatingProcessFileName == @"iexplore.exe"
+    // Chrome
+    //or (InitiatingProcessFileName =~ "chrome.exe")
+    // Firefox
+    //or (InitiatingProcessFileName =~ "firefox.exe")
+| summarize by RemoteUrl, InitiatingProcessFileName, InitiatingProcessVersionInfoProductName, InitiatingProcessVersionInfoProductVersion
