@@ -1,0 +1,7 @@
+let CVEDetected = DeviceTvmSoftwareVulnerabilities
+| where CveId contains "2021-44228" or CveId contains "2021-45046" or CveId contains "2021-45105"
+|project DeviceName, OSPlatform,SoftwareName,SoftwareVendor,SoftwareVersion,CveId;
+let AVEval = DeviceTvmSecureConfigurationAssessment
+|where ConfigurationId in ('scid-2010', 'scod=2016', 'scid-96');
+CVEDetected
+| join AVEval on DeviceName
