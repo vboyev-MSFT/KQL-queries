@@ -1,0 +1,29 @@
+let GroupChanges = (
+IdentityDirectoryEvents
+| where ActionType == 'Group Membership changed'
+| extend AddedToGroup = tostring(AdditionalFields['TO.GROUP'])
+//| extend RemovedFromGroup = AdditionalFields['FROM.GROUP']
+| extend TargetAccount = AdditionalFields['TARGET_OBJECT.USER']
+//| where AddedToGroup == group or RemovedFromGroup == group
+);
+let InterestedGroup = datatable(AddedToGroup:string)
+[
+'Domain Admins',
+'Administrators',
+'Enterprise Admins',
+'Enterprise Key Admins',
+'Account Operators',
+'Domain Controllers',
+'Account Operators',
+'Backup Operators',
+'Schema Admins',
+'Exchange Recipient Administrators',
+'Organization Management',
+'RTCDomainUserAdmins',
+'RTCDomainServerAdmins'
+'ENTERPRISE DOMAIN CONTROLLERS',
+];
+InterestedGroup
+| join GroupChanges on AddedToGroup 
+// | project Timestamp, ActionType, TargetAccount, TargetAccountUpn, AddedToGroup, Application, AdditionalFields 
+//original author Sam Obeng saobeng@microsoft.com
