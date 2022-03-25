@@ -1,0 +1,5 @@
+DeviceEvents
+| where ActionType == "AntivirusDetection"
+| extend ParsedFields=parse_json(AdditionalFields)
+| project Timestamp, DeviceName, DeviceId, IsPassiveMode=tostring(ParsedFields.IsPassiveMode),ReportSource=tostring(ParsedFields.ReportSource),ThreatName=tostring(ParsedFields.ThreatName),WasRemediated=tobool(ParsedFields.WasRemediated),WasExecutingWhileDetected=tobool(ParsedFields.WasExecutingWhileDetected),FileName, SHA1, InitiatingProcessFileName, InitiatingProcessCommandLine,AdditionalFields
+|where IsPassiveMode != "false"
