@@ -1,0 +1,9 @@
+//easily query for devices that have open vulnerabilities that are shown in the CISA known vulnerabilities catalog
+externaldata(['vulnerabilities']:string)[h@'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json']
+with(format='multijson', ingestionMapping='[{"Column":"cveID","Properties":{"Path":"$.vulnerabilities"}},{"Column":"vulnerabilityName","Properties":{"Path":"$.vulnerabilityName"}}]')
+| extend data = parse_json(['vulnerabilities'])
+| mv-expand data
+| project CISAcveID = tostring(data.cveID), CISADescription = tostring(data.shortDescription)
+| join kind=inner DeviceTvmSoftwareVulnerabilities on $left.CISAcveID == $right.CveId
+| summarize vulnerableDevices = dcount(DeviceId) by CveId
+| render columnchart
