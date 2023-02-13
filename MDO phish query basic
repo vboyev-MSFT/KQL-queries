@@ -1,0 +1,3 @@
+EmailEvents
+| where DetectionMethods contains "phish"
+|project Timestamp, DetectionMethods, SenderDisplayName, SenderFromAddress, Subject
