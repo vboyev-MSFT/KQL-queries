@@ -2,6 +2,7 @@
 //This query should output where the url/remoteip download came from and where it was saved. This must work for both Windows and Mac OS.
 //It should include downloads from any web browser, any office application, or even a powershell download.
 //IT will also output for a specific device of all web browsing activity from all web browsers on both Windows and Mac OS workstations.
+// Don't recall where I found this query - would like to credit whomever wrote it...
 DeviceNetworkEvents
 | where Timestamp > ago(1d)
 | where DeviceId == "xxxxxxxxxxxx"
