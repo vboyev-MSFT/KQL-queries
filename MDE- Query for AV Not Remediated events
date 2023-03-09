@@ -7,5 +7,5 @@ WasExecutingWhileDetected=tobool(ParsedFields.WasExecutingWhileDetected),
 FileName, SHA1, InitiatingProcessFileName, InitiatingProcessCommandLine,
 DeviceName, Timestamp
 |where WasRemediated != '1'
-| limit 100
+//| limit 100
 //Query for alerts or malware is not remediated.
