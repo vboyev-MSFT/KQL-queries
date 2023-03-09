@@ -1,0 +1,4 @@
+securityresources
+|where type == "microsoft.security/pricings"
+| project DefenderPlan=name, subscriptionId, Pricing =properties.pricingTier
+| order by DefenderPlan asc
