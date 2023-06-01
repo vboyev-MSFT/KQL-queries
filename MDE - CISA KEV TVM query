@@ -1,0 +1,22 @@
+let cisaKnownExploitedVulns = materialize((externaldata (CveId:string, Vendor:string, Product:string, CisaVulnerabilityName:string, CisaAddedDate:datetime, CisaVulnerabilityDescription:string, CisaActionRequired:string, CisaDueDate:datetime)
+[
+    h@'https://www.cisa.gov/sites/default/files/csv/known_exploited_vulnerabilities.csv'
+]
+with(format='csv',ignoreFirstRecord=true))
+| project CveId, CisaDueDate, Vendor, Product, CisaVulnerabilityName, CisaVulnerabilityDescription
+| extend IsPastDue = iff(CisaDueDate < now(),true,false)
+| project-reorder CveId, CisaDueDate, IsPastDue, Vendor, Product, CisaVulnerabilityName, CisaVulnerabilityDescription);
+cisaKnownExploitedVulns
+| join kind=leftouter (
+    DeviceTvmSoftwareVulnerabilitiesKB
+    | project CveId, CvssScore, IsExploitAvailable, AffectedSoftware, PublishedDate, VulnerabilityDescription
+) on $left.CveId == $right.CveId
+| extend VulnerabilityDescription = case (
+    VulnerabilityDescription == 'N/A', CisaVulnerabilityDescription,
+    VulnerabilityDescription == '', CisaVulnerabilityDescription,
+    isnull(VulnerabilityDescription), CisaVulnerabilityDescription,
+    VulnerabilityDescription
+    )
+| project-away CveId1, CisaVulnerabilityDescription
+| project-reorder CveId, PublishedDate, CvssScore, CisaDueDate, IsPastDue, IsExploitAvailable, Vendor, Product, AffectedSoftware, CisaVulnerabilityName, VulnerabilityDescription
+| sort  by CvssScore
