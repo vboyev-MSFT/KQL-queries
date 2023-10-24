@@ -1,0 +1,7 @@
+DeviceInfo
+| order by Timestamp desc
+| summarize arg_max(Timestamp, ClientVersion) by DeviceId,DeviceName, OSPlatform, DeviceType
+| extend packed = case(ClientVersion contains "10.85","Unified", 
+ClientVersion contains "10.84","Unified",
+ClientVersion contains "10.82","Unified", 
+ClientVersion contains "10.3", "MMA","N/A" )
