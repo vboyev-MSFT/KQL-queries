@@ -1,0 +1,13 @@
+// Surce: https://www.microsoft.com/en-us/security/blog/2022/07/26/malicious-iis-extensions-quietly-open-persistent-backdoors-into-servers/#Improving-defenses
+DeviceProcessEvents
+| where ProcessCommandLine has “appcmd.exe add module”
+| where InitiatingProcessParentFileName == “w3wp.exe”
+
+DeviceProcessEvents
+| where InitiatingProcessFileName == “powershell.exe”
+|where ProcessCommandLine has ” system.enterpriseservices.internal.publish”
+| where InitiatingProcessParentFileName == “w3wp.exe”
+
+DeviceProcessEvents
+|where ProcessCommandLine has ” \\gacutil.exe /I”
+| where InitiatingProcessParentFileName == “w3wp.exe”
