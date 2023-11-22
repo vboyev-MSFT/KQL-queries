@@ -1,0 +1,10 @@
+// Detect potential bruteforce/dictionary attacks against SSH
+DeviceNetworkEvents
+| where ActionType == 'SshConnectionInspected'
+| extend json = todynamic(AdditionalFields)
+| extend direction=tostring(json.direction), auth_attempts = toint(json.auth_attempts), auth_success=tostring(json.auth_success)
+| where auth_success=='false'
+| where auth_attempts > 3
+| summarize count() by LocalIP, RemoteIP
+| where count_ > 4
+| sort by count_ desc
