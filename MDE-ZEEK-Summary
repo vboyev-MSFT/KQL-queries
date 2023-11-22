@@ -1,0 +1,11 @@
+DeviceNetworkEvents
+|summarize by ActionType
+//Protocol / Signature Name 	 New Action Type 
+//SSH 				SshConnectionInspected 
+//FTP_Upload 			FtpConnectionInspected 
+//FTP_Client 			FtpConnectionInspected 
+//HTTP_Client 			HttpConnectionInspected 
+//HTTP_Server 			HttpConnectionInspected 
+//HTTP_RequestBodyParameters 	HttpConnectionInspected 
+//HTTPS_Client 			SslConnectionInspected 
+//DNS_Request 			DnsConnectionInspected 
