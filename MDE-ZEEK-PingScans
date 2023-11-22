@@ -1,0 +1,8 @@
+// Search for ping scans
+DeviceNetworkEvents
+| where ActionType == "IcmpConnectionInspected"
+| extend json = todynamic(AdditionalFields)
+| extend Direction = json.direction
+| where Direction == "Out" and ipv4_is_private(RemoteIP)
+| summarize IpsList = make_set(RemoteIP) by DeviceId, bin(Timestamp, 10m)
+| where array_length(IpsList) > 5
