@@ -1,0 +1,8 @@
+// search for high upload over ICMP
+DeviceNetworkEvents
+| where ActionType == "IcmpConnectionInspected"
+| extend json = todynamic(AdditionalFields)
+| extend Upload = tolong(json['orig_bytes']), Download = tolong(json['resp_bytes']), Direction = tostring(json.direction), Duration = tolong(json.duration)
+| where Direction == "Out" and Duration > 100 and Upload > 500000
+| top 10 by Upload
+| project RemoteIP, LocalIP, Upload = format_bytes(Upload, 2, "MB"), Download = format_bytes(Download, 2, "MB"),Direction,Duration,Timestamp,DeviceId,DeviceName
