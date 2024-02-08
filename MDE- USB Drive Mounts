@@ -1,5 +1,5 @@
 DeviceEvents
-| where ActionType=="UsbDriveMount"
+| where ActionType=="UsbDriveMounted"
 |project InitiatingProcessAccountUpn, AccountDomain, AccountSid, DeviceId, DeviceName, AdditionalFields, Timestamp
 | extend ParsedFields=parse_json(AdditionalFields)
 | project InitiatingProcessAccountUpn, AccountSid, AccountDomain,DeviceId, DeviceName, DriveLetter=ParsedFields.DriveLetter, MountTime=Timestamp,
