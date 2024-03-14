@@ -1,2 +1,4 @@
-securityresources
-| where type == "microsoft.security/pricings"
+//Source - https://learn.microsoft.com/en-us/azure/governance/resource-graph/samples/samples-by-category?tabs=azure-cli#show-defender-for-cloud-plan-pricing-tier-per-subscription
+SecurityResources
+| where type == 'microsoft.security/pricings'
+| project Subscription= subscriptionId, Azure_Defender_plan= name, Status= properties.pricingTier
