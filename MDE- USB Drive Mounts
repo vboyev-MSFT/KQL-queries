@@ -5,3 +5,4 @@ DeviceEvents
 | project InitiatingProcessAccountUpn, AccountSid, AccountDomain,DeviceId, DeviceName, DriveLetter=ParsedFields.DriveLetter, MountTime=Timestamp,
  ProductName=ParsedFields.ProductName,SerialNumber=ParsedFields.SerialNumber,Manufacturer=ParsedFields.Manufacturer
 | order by DeviceId asc, MountTime desc;
+//see https://learn.microsoft.com/en-us/microsoft-365/security/defender-endpoint/device-control-policies?view=o365-worldwide&tabs=XML#using-reports-and-advanced-hunting-to-determine-properties-of-devices for device  control mappings to KQL values
