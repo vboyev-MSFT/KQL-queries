@@ -5,4 +5,4 @@ DeviceInfo
 ClientVersion contains "10.84","Unified",
 ClientVersion contains "10.82","Unified",
 ClientVersion contains "10.3", "MMA","N/A" )
-| where packed contains "MMA" and OnboardingStatus contains "Onboarded"
+| where packed contains "MMA" and OnboardingStatus == "Onboarded"
