@@ -1,0 +1,2 @@
+DeviceProcessEvents
+| where ProcessCommandLine has "SenseIR.exe" and ProcessCommandLine has "OnlineSenseIR"
