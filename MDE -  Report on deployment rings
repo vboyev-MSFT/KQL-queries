@@ -1,0 +1,18 @@
+//Stolen from Matt Novitsch - Microsoft Fast Track
+DeviceTvmInfoGathering
+| extend Fields=parse_json(AdditionalFields)
+| extend AvMode = tostring(Fields.AvMode)
+| extend AvEngineVersion = tostring(Fields.AvEngineVersion)
+| extend AvSignatureVersion = tostring(Fields.AvSignatureVersion)
+| extend AvPlatformVersion = tostring(Fields.AvPlatformVersion)
+| extend AvEngineUpdateTime = tostring(Fields.AvEngineUpdateTime)
+| extend AvSignatureUpdateTime = tostring(Fields.AvSignatureUpdateTime)
+| extend AvPlatformUpdateTime = tostring(Fields.AvPlatformUpdateTime)
+| extend AvModeStatus = iif(tostring(Fields.AvMode) == '0', 'Active' , iif(tostring(Fields.AvMode) == '1', 'Passive' ,iif(tostring(Fields.AvMode) == '4', 'EDR Blocked',iif(tostring(Fields.AvMode) == '2', 'SxS Passive' ,'Unknown'))))
+| join kind=inner (DeviceInfo
+    | project DeviceName, LoggedOnUsers
+    ) on DeviceName
+| where AvMode in(0, 1, 2, 3, 4)
+//| summarize count(DeviceName) by AvModeStatus
+//| where OSPlatform contains "Linux"
+| distinct DeviceName,AvModeStatus, OSPlatform, AvEngineVersion, AvSignatureVersion, AvPlatformVersion, AvEngineUpdateTime, AvSignatureUpdateTime, AvPlatformUpdateTime
