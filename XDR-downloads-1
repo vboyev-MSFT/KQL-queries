@@ -1,0 +1,11 @@
+//from https://techcommunity.microsoft.com/blog/microsoftdefenderatpblog/hunting-tip-of-the-month-browser-downloads/220454
+let emailLinks =
+    MiscEvents
+    // Filter on link clicks from Outlook (do case insensitive match using =~)
+    | where ActionType == "BrowserLaunchedToOpenUrl" and isnotempty(RemoteUrl) and InitiatingProcessFileName =~ "outlook.exe" 
+    | project ComputerName, MailLink=RemoteUrl;
+FileCreationEvents
+| where isnotempty(FileOriginUrl) and InitiatingProcessFileName in~ ("chrome.exe", "browser_broker.exe")
+| project FileName, FileOriginUrl, FileOriginReferrerUrl, ComputerName, EventTime, SHA1
+| join kind=inner (emailLinks) on ComputerName, $left.FileOriginUrl == $right.MailLink
+| count
