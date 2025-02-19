@@ -1,0 +1,21 @@
+DeviceNetworkEvents
+| where tostring(AdditionalFields) has_any ("e7d705a3286e19ea42f587b344ee6865", 
+                                          "a95ca7eab4d47d051a5cd4fb7b6005dc", 
+                                          "6734f37431670b3ab4292b8f60f29984", 
+                                          "623de93db17d313345d7ea481e7443cf", 
+                                          "4d7a28d6f2263ed61de88ca66eb011e3", 
+                                          "80b3a14bccc8598a1f3bbe83e71f735f")
+| project Timestamp, DeviceId, AdditionalFields, Protocol, RemoteIP
+//source: for the hashes - https://engineering.salesforce.com/tls-fingerprinting-with-ja3-and-ja3s-247362855967/
+//Standard Tor Client:
+//JA3 = e7d705a3286e19ea42f587b344ee6865 ( Tor Client )
+//JA3S = a95ca7eab4d47d051a5cd4fb7b6005dc( Tor Server Response )
+//The Tor servers always respond to the Tor client in exactly the same way, providing higher confidence that the traffic is indeed Tor. Further examples —
+//Trickbot malware:
+//JA3 = 6734f37431670b3ab4292b8f60f29984 ( Trickbot )
+//JA3S = 623de93db17d313345d7ea481e7443cf( C2 Server Response )
+//Emotet malware:
+//JA3 = 4d7a28d6f2263ed61de88ca66eb011e3 ( Emotet )
+//JA3S = 80b3a14bccc8598a1f3bbe83e71f735f ( C2 Server Response )
+//see also https://sslbl.abuse.ch/ja3-fingerprints/
+//and https://github.com/0xAnalyst/DefenderATPQueries/blob/main/C2/MaliciousJA3Fingerprint.kql
