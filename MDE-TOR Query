@@ -1,0 +1,10 @@
+let torlistfull = materialize(
+    externaldata (IpAddress:string)
+    [
+        h@'https://www.dan.me.uk/torlist/?full'
+    ]
+    with(format='csv', ignoreFirstRecord=false)
+);
+DeviceNetworkEvents
+| where RemoteIP in (torlistfull)
+| project Timestamp, DeviceName, RemoteIP, RemotePort, LocalIP, LocalPort, Protocol, ActionType
