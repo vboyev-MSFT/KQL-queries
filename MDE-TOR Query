@@ -7,4 +7,4 @@ let torlistfull = materialize(
 );
 DeviceNetworkEvents
 | where RemoteIP in (torlistfull)
-| project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessFolderPath, RemoteIP, RemotePort, LocalIP, LocalPort, Protocol, ActionType
+| project Timestamp, DeviceName, InitiatingProcessAccountName, InitiatingProcessFolderPath, RemoteIP, RemotePort, LocalIP, LocalPort, Protocol, ActionType, RemoteIP, RemotePort
