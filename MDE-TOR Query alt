@@ -1,0 +1,7 @@
+let TorNodes = (
+externaldata (TorIP:string, Source:string, Description:string)
+[h@'https://firewalliplists.gypthecat.com/lists/kusto/kusto-tor-exit.csv.zip']
+with (ignoreFirstRecord=true));
+TorNodes
+| join ( DeviceNetworkEvents ) on $left.TorIP == $right.RemoteIP
+| project Timestamp, DeviceName, InitiatingProcessAccountName,InitiatingProcessFolderPath, LocalIP, LocalPort, Protocol, ActionType, RemoteIP, RemotePort
