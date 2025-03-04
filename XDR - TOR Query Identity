@@ -1,0 +1,9 @@
+let torlistfull = materialize(
+    externaldata (IpAddress:string)
+    [
+        h@'https://github.com/AlterSolutions/tornodes_lists/blob/main/guards/all_guards_ips'
+    ]
+    with(format='csv', ignoreFirstRecord=false)
+);
+IdentityLogonEvents
+| where IPAddress in (torlistfull)
