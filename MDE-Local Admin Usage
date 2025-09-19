@@ -1,5 +1,3 @@
-// This is for use as a custom alert within MDE/MDATP to alert when a user with admin privs logs on
-// This can be very noisey if you set this as a custom alert.
 DeviceLogonEvents
 | where IsLocalAdmin == 1
 | project  Timestamp, DeviceName,ActionType, AccountDomain, AccountName, AccountSid, DeviceId, ReportId
