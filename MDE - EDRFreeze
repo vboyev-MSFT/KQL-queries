@@ -1,0 +1,3 @@
+DeviceProcessEvents
+| where FileName has 'werfaultsecure.exe'
+|project TimeGenerated, Timestamp, DeviceName, ActionType, FileName, InitiatingProcessCommandLine, InitiatingProcessFileName
