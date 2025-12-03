@@ -1,0 +1,10 @@
+let Exec = "user1@contoso.com";
+EmailEvents
+| where Subject contains "TEST: URL + Attachment Validation"
+and RecipientEmailAddress  == Exec
+and Subject contains "TEST: URL + Attachment Validation"
+| extend ETRraw = ExchangeTransportRule
+| extend RuleGuid = extract(@"([0-9A-Fa-f-]{36})", 1, ETRraw)
+| extend RuleName = extract(@"[0-9A-Fa-f-]{36}""\s*:\s*""([^""]+)", 1, ETRraw)
+| where RuleName == "Stamp X-VIP for mail TO Execs"
+| sort by Timestamp desc
