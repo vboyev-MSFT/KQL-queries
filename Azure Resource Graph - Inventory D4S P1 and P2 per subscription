@@ -1,0 +1,15 @@
+//run in Azure Resource Graph
+SecurityResources
+| where type == "microsoft.security/defenderforserversettings"
+| extend subscriptionId = tostring(parse_json(properties).subscriptionId)
+| extend plan = tostring(parse_json(properties).pricingTier)
+| summarize totalServers = count(), 
+            P1Servers = countif(plan == "Standard"), 
+            P2Servers = countif(plan == "Advanced") 
+        by subscriptionId
+| join kind=inner (
+    ResourceContainers
+    | where type == "microsoft.resources/subscriptions"
+    | project subscriptionId = id, subscriptionName = name
+) on subscriptionId
+| project subscriptionName, subscriptionId, totalServers, P1Servers, P2Servers
