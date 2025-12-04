@@ -1,3 +1,4 @@
+//Sample KQL to show you can parse ETR from the data tables
 let Exec = "user1@contoso.com";
 EmailEvents
 | where Subject contains "TEST: URL + Attachment Validation"
