@@ -1,0 +1,5 @@
+DeviceTvmSecureConfigurationAssessment
+| join kind=inner (DeviceInfo | project DeviceId, OSPlatform, DeviceName) on DeviceId
+| where ConfigurationSubcategory has_any ("Defender", "Endpoint", "Attack Surface Reduction", "Antivirus")
+| summarize AffectedDevices = dcount(DeviceName) by ConfigurationSubcategory
+| top 20 by AffectedDevices desc
