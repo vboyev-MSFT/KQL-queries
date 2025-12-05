@@ -1,0 +1,6 @@
+let iocUrl = "http://bit.ly/benign123";
+EmailUrlInfo
+| where Url == iocUrl
+| join kind=leftouter EmailEvents on NetworkMessageId
+| project Timestamp, RecipientEmailAddress, SenderFromAddress, Subject
+| summarize Clickers=dcount(RecipientEmailAddress) by bin(Timestamp, 1h)
