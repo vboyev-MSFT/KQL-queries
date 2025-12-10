@@ -1,0 +1,5 @@
+DeviceEvents
+| where ActionType == "AntivirusScanCompleted"
+| extend AF = parse_json(AdditionalFields)
+| where tostring(AF.ScanTypeIndex) =~ "Quick"
+| summarize LastQuickScanCompletionTime = max(Timestamp) by DeviceId, DeviceName
