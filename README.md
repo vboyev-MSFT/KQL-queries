@@ -1,61 +1,304 @@
-Here’s the updated README with the **standard CSA code disclaimer** replacing the license section:
+🚀 KQL Queries Repository
+A curated collection of Microsoft security‑focused KQL queries, built for use across Microsoft 365 Defender, Microsoft Sentinel, Azure Resource Graph, and related platforms.
+This repository provides:
 
-***
+Practical, real‑world KQL for detection, reporting, and investigation
+Coverage across multiple security products and data sources
+Queries mapped to MITRE ATT&CK tactics where appropriate
+Indexed structure to help you find the right query quickly
 
-# Security-Focused KQL Queries
 
-Welcome to the **Security-Focused KQL Queries** repository! This collection is designed for **security analysts, cloud architects, and threat hunters** who want to leverage **Kusto Query Language (KQL)** for advanced detection, investigation, and reporting across Microsoft security platforms such as **Microsoft Sentinel**, **Microsoft Defender for Endpoint**, and other Azure-integrated data sources.
+📁 Repository Structure
+/MDE
+/MDC
+/M365
+/AAD
+/ARG
+/Initiatives
 
-***
+Each folder contains logically grouped KQL queries based on product area or detection scenario.
 
-## 📌 What You’ll Find Here
+🧭 Query Index
+Below is a structured index of all queries, organized by:
 
-*   **Curated Queries**: Pre-built KQL queries for common and advanced security scenarios.
-*   **Threat Hunting Patterns**: Queries to identify suspicious activities, anomalies, and potential indicators of compromise.
-*   **Operational Insights**: Dashboards and analytics queries for monitoring security posture and compliance.
-*   **Reusable Templates**: Modular query structures that can be adapted for different environments.
+Security Domain
+MITRE ATT&CK Tactic
+Data Source
+Target Use Case
 
-***
 
-## 🚀 Getting Started
+Note: Categorization is based on typical use of each query. Adjust as you refine metadata inside each file.
 
-1.  **Clone the Repository**
-    ```bash
-    git clone https://github.com/vboyev-MSFT/KQL-queries.git
-    cd KQL-queries
-    ```
-2.  **Explore the Query Categories**  
-    Navigate through folders organized by use case (e.g., Threat Hunting, Compliance, Incident Response).
-3.  **Run Queries in Your Environment**
-    *   Open **Microsoft Sentinel** or **Log Analytics**.
-    *   Paste the query into the KQL editor.
-    *   Adjust filters (e.g., time range, resource group) as needed.
 
-***
+🔐 1. Security Domain Index
+Microsoft Defender for Endpoint (MDE)
 
-## 🔍 How to Use These Queries
 
-*   **For Detection**: Deploy queries as analytics rules in Microsoft Sentinel.
-*   **For Investigation**: Use queries interactively during incident triage.
-*   **For Reporting**: Integrate queries into workbooks for visualization and dashboards.
 
-***
 
-## 🤝 Contributing Guidelines
 
-We welcome contributions! Here’s how you can help:
 
-*   **Add New Queries**: Submit a pull request with your query and a short description.
-*   **Improve Existing Queries**: Optimize performance or add comments for clarity.
-*   **Report Issues**: Use GitHub Issues to suggest improvements or flag problems.
 
-**Contribution Checklist**:
 
-*   Include comments explaining query logic.
-*   Validate query performance in a test environment.
-*   Follow consistent naming conventions for files and folders.
 
-***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Query NameData SourceUse CaseMDE – QuickScan CompletionDeviceEventsValidate AV quick scan outcomesMDE – Failed Logon From Public IPsDeviceLogonEventsDetect suspicious remote logon attemptsMDE – PowerShell DownloadsDeviceProcessEventsIdentify suspicious PowerShell web activityMDE – USB Drive MountsDeviceEventsTrack removable device insertionMDE – EDR Block Mode ActivityDeviceEventsShow EDR-enforced blocking actions
+
+Microsoft Defender for Cloud (MDC / ASC)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QueryData SourceUse CaseASC – All AlertsSecurityAlertGlobal visibility into cloud alertsASC – Pricing / Plan Tier QueryResourceGraphResourcesIdentify subscription ASC tiersASC – Subscription Tier QueryResourceGraphResourcesLicensing overview
+
+Microsoft Defender for Identity (MDI)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QueryData SourceUse CaseLDAP BindsIdentityDirectoryEventsTrack LDAP authentication activityWMI and PsExec UsageIdentityDirectoryEventsDetect lateral movement tools
+
+Azure Resource Graph (ARG)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QueryData SourceUse CaseVM Extensions InventoryResourceGraphResourcesAudit VM extension deploymentD4S P1/P2 InventoryResourceGraphResourcesSubscription‑level SKU mapping
+
+Microsoft 365 Defender / AH
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QueryData SourceUse CaseMITRE Chart of AlertsM365 Defender datasetsVisualization of alert mappingTable Size QueryAdvanced Hunting tablesStorage optimization / cost insights
+
+🗡 2. MITRE ATT&CK Tactic Index
+Initial Access
+
+Failed logon from public IPs (MDE)
+Successful logon from public IP (MDE)
+
+Execution
+
+Suspicious PowerShell Downloads (MDE)
+Suspicious CMD spawning (MDE – Parent process spawning cmd.exe)
+
+Persistence
+
+Local Admin Changes (MDE)
+AAD – Suspicious Group Adds
+
+Privilege Escalation
+
+Local Admin Usage (MDE)
+AAD Directory Role Changes
+
+Defense Evasion
+
+ASR Bypass indicators (MDE)
+Tamper Not Enabled (MDE – Log4J and NP CBP)
+
+Credential Access
+
+LDAP binds (MDI)
+Unusual authentication attempts
+
+Discovery
+
+VM Extensions Inventory (ARG)
+Resource Graph – VM Communication Reports
+
+Lateral Movement
+
+PsExec Activity (MDI / MDE)
+WMI Exec Activity (MDI)
+
+Collection
+
+Screenshot Capture Events (MDE)
+USB File Copy (MDE)
+
+Command & Control
+
+Network Protection Blocks (MDE)
+Browser URL Access Query (MDE)
+
+Impact
+
+EDR Freeze Events (MDE)
+TVM Exposure Reports
+
+
+📊 3. Data Source Index
+Advanced Hunting
+
+DeviceProcessEvents
+DeviceFileEvents
+DeviceNetworkEvents
+DeviceLogonEvents
+EmailEvents
+CloudAppEvents
+IdentityDirectoryEvents
+
+Azure Resource Graph
+
+ResourceGraphResources
+
+Microsoft Sentinel
+
+SecurityAlert
+Heartbeat
+AzureActivity
+
+Defender for Cloud Apps
+
+CloudAppEvents
+
+Entra ID / Identity
+
+IdentityDirectoryEvents
+AuditLogs
+
+
+🎯 4. Target Use Case Index
+Threat Hunting
+
+PowerShell Downloads
+Public IP Logon Attempts
+WMI/PsExec Lateral Movement
+Suspicious Group Additions
+
+Incident Response
+
+Screenshot Capture
+USB Device Investigation
+EDR Block Mode Events
+
+Security Posture & Hygiene
+
+ASC Pricing Tier Queries
+Defender Antivirus Status
+Secure Configuration Assessment
+
+Inventory & Compliance
+
+VM Extension Inventory
+Subscription Plan Tier
+Table Size / Data Volume Queries
+
+Reporting & Analytics
+
+MITRE Alert Mapping
+Browser URL Access Trends
+QuickScan Reporting
+
+
+🛠 Contributing
+All contributions welcome — especially improvements to:
+
+tagging (ATT&CK, domain, data source)
+query metadata
+examples / sample output
+documentation
+
+Feel free to submit a PR or open an Issue.
+
+📄 License
+MIT License unless specified otherwise.
 
 ## ⚠️ Code Disclaimer
 
