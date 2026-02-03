@@ -1,0 +1,4 @@
+resources
+| where type =~ 'Microsoft.Network/networkInterfaces'
+| mv-expand ipconfig = properties.ipConfigurations
+| project privateIPAddress = tostring(ipconfig.properties.privateIPAddress), privateSubnetId = tostring(ipconfig.properties.subnet.id), name, location,resourceGroup, subscriptionId
