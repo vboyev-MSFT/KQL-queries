@@ -1,0 +1,5 @@
+AIAgentsInfo
+|summarize count()by AIAgentName
+//| where RegistrySource == "A365"
+//| where AgentStatus != "Deleted"
+//see https://review.learn.microsoft.com/en-us/defender-endpoint/protect-ai-agents-overview?branch=pr-en-us-7566 and https://review.learn.microsoft.com/en-us/defender-xdr/security-for-ai/ai-agent-inventory?branch=main
