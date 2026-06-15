@@ -1,0 +1,8 @@
+// Monitor creation/modification of AI agent skill and context files
+DeviceFileEvents
+| where Timestamp > ago(7d)
+| where OSPlatform == "macOS"
+| where ActionType in ("FileCreated", "FileModified")
+| where tolower(FileName) in ("skill.md", "skills.md", "soul.md","memory.md", "agents.md")
+| project Timestamp, DeviceName, FileName, FolderPath, ActionType,FileSize, FileOriginUrl,InitiatingProcess = InitiatingProcessFileName,InitiatingCmdLine = InitiatingProcessCommandLine
+| sort by Timestamp desc
