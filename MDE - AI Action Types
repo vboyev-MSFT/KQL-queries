@@ -1,0 +1,2 @@
+DeviceEvents 
+| where ActionType == "LocalAiModelDiscoveryEvent" or ActionType == "McpConfigurationDiscoveryEvent" or ActionType == "InstalledVSCodeExtensionInfo" or ActionType == "InstalledClaudeExtensionInfo"
