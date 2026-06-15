@@ -5,5 +5,5 @@ DeviceFileEvents
 | where OSPlatform == "macOS"
 | where ActionType == "FileCreated"
 | where tolower(FileName) in ("skill.md", "skills.md", "soul.md")
-9     | where InitiatingProcessFileName in (SuspiciousCreators) or isnotempty(FileOriginUrl)
+| where InitiatingProcessFileName in (SuspiciousCreators) or isnotempty(FileOriginUrl)
 | project Timestamp, DeviceName, FileName, FolderPath,FileOriginUrl, FileSize, InitiatingProcessFileName, InitiatingProcessCommandLine
