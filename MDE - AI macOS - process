@@ -1,5 +1,5 @@
 //This should be made redundant by https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview and https://techcommunity.microsoft.com/blog/microsoftthreatprotectionblog/the-next-frontier-in-endpoint-security-securing-local-ai-agents-with-microsoft-d/4524651 as the preview expands to cover macOS
-// 1A: Inventory of AI-related processes on macOS (Reporting)
+// Inventory of AI-related processes on macOS (Reporting)
 DeviceInfo
 | where OSPlatform has "macOS"
 |join DeviceProcessEvents on DeviceId
