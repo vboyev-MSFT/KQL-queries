@@ -1,0 +1,7 @@
+//This should be made redundant by https://learn.microsoft.com/en-us/defender-endpoint/local-agent-discovery-overview and https://techcommunity.microsoft.com/blog/microsoftthreatprotectionblog/the-next-frontier-in-endpoint-security-securing-local-ai-agents-with-microsoft-d/4524651 as the preview expands to cover macOS
+// 1A: Inventory of AI-related processes on macOS (Reporting)
+DeviceProcessEvents
+| where OSPlatform == "macOS"
+| where tolower(FileName) in ("ollama", "openclaw", "codex", "claude")or ProcessCommandLine has_any("ollama", "openclaw", "openclaw.mjs", "claude-code", "codex-cli")
+| summarize FirstSeen = min(Timestamp), LastSeen = max(Timestamp),ExecutionCount = count(),DistinctUsers = dcount(AccountName) by DeviceName, FileName, FolderPath
+| sort by LastSeen desc
