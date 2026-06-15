@@ -2,7 +2,7 @@
 // 1A: Inventory of AI-related processes on macOS (Reporting)
 DeviceInfo
 | where OSPlatform has "macOS"
-|join DeviceEvents on DeviceId
+|join DeviceProcessEvents on DeviceId
 | where tolower(FileName) in ("ollama", "openclaw", "codex", "claude")or ProcessCommandLine has_any("ollama", "openclaw", "openclaw.mjs", "claude-code", "codex-cli")
 | summarize FirstSeen = min(Timestamp), LastSeen = max(Timestamp),ExecutionCount = count(),DistinctUsers = dcount(AccountName) by DeviceName, FileName, FolderPath
 | sort by LastSeen desc
