@@ -1,9 +1,10 @@
 //Alert on SKILL.md created by suspicious processes
-let SuspiciousCreators = dynamic(["curl", "wget", "python", "python3","bash", "sh", "zsh", "nscurl", "scp"]);
-DeviceFileEvents
-| where Timestamp > ago(1d)
+DeviceInfo
 | where OSPlatform == "macOS"
+|distinct DeviceId
+|join DeviceFileEvents on DeviceId
+| where Timestamp > ago(1d)
 | where ActionType == "FileCreated"
 | where tolower(FileName) in ("skill.md", "skills.md", "soul.md")
-| where InitiatingProcessFileName in (SuspiciousCreators) or isnotempty(FileOriginUrl)
+| where InitiatingProcessFileName in ("curl", "wget", "python", "python3","bash", "sh", "zsh", "nscurl", "scp") or isnotempty(FileOriginUrl)
 | project Timestamp, DeviceName, FileName, FolderPath,FileOriginUrl, FileSize, InitiatingProcessFileName, InitiatingProcessCommandLine
