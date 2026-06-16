@@ -1,0 +1,40 @@
+DeviceInfo
+| where OSPlatform == "macOS"
+| distinct DeviceId
+| join DeviceProcessEvents on DeviceId
+| where Timestamp > ago(30d)
+| where (
+    FileName in~ (
+        "ollama",
+        "openclaw",
+        "ollama_llama_server",
+        "ollama-runner",
+        "mcp-server",
+        "codex",
+        "codex-cli",
+        "claude-code",
+        "npx",
+        "node",
+        "deno"
+    )
+    or ProcessCommandLine has_any (
+        "ollama",
+        "openclaw",
+        "ollama_llama_server",
+        "ollama-runner",
+        "mcp-server",
+        "codex",
+        "codex-cli",
+        "claude-code",
+        "npx",
+        "node",
+        "deno"
+    )
+)
+| summarize
+    FirstSeen = min(Timestamp),
+    LastSeen = max(Timestamp),
+    ExecutionCount = count(),
+    DistinctUsers = dcount(AccountName)
+    by DeviceName, FileName, FolderPath
+| sort by LastSeen desc
