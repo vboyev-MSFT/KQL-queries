@@ -1,0 +1,16 @@
+DeviceInfo
+| where OSPlatform == "macOS"
+| distinct DeviceId
+|join DeviceNetworkEvents on DeviceId
+| where Timestamp > ago(1d)
+| where ActionType == "ListeningConnectionCreated"
+| where LocalPort in (18789, 11434)
+| project
+    Timestamp,
+    DeviceName,
+    LocalIP,
+    Port = LocalPort,
+    ProcessName = InitiatingProcessFileName,
+    CommandLine = InitiatingProcessCommandLine,
+    User = InitiatingProcessAccountName
+| sort by Timestamp desc
