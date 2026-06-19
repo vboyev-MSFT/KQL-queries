@@ -1,0 +1,21 @@
+//Purpose: Detects suspicious creation or modification of LaunchAgent plist files containing “openclaw” in the filename
+//(e.g. if the OpenClaw agent installs a LaunchAgent for persistence). 
+//This query hunts DeviceFileEvents in the last day for any .plist file in a LaunchAgents path that has “openclaw” in its name, or was created by an OpenClaw process (or Node)
+DeviceFileEvents
+| where Timestamp > ago(1d)
+| where ActionType in ("FileCreated", "FileModified")
+| where FolderPath has "LaunchAgents" and FileName endswith ".plist"
+| where FileName has "openclaw"
+    or InitiatingProcessFileName in~ ("openclaw", "node")
+    or InitiatingProcessCommandLine has "openclaw"
+| where DeviceId in (
+    DeviceInfo | where OSPlatform == "macOS" | distinct DeviceId
+)
+| project
+    Timestamp,
+    DeviceName,
+    FileName,
+    FolderPath,
+    InitiatingProcessFileName,
+    InitiatingProcessCommandLine,
+    User = InitiatingProcessAccountName
