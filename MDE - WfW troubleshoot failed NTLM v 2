@@ -1,0 +1,77 @@
+let TimeWindow = 2m;
+DeviceLogonEvents
+| where ActionType == "LogonFailed"
+| where Protocol =~ "NTLM" or LogonType =~ "Network"
+| extend LogonTime = Timestamp
+| project
+    LogonTime,
+    DeviceId,
+    DeviceName,
+    AccountName,
+    AccountDomain,
+    Protocol,
+    LogonType,
+    FailureReason,
+    InitiatingProcessId,
+    InitiatingProcessFileName,
+    InitiatingProcessAccountName,
+    InitiatingProcessCommandLine,
+    RemoteIP,
+    RemotePort
+| join kind=leftouter (
+    DeviceNetworkEvents
+    | extend NetEvtTime = Timestamp
+    | project
+        DeviceId,
+        NetEvtTime,
+        InitiatingProcessId,
+        RemoteIP,
+        RemotePort,
+        LocalPort,
+        Protocol,
+        ActionType,
+        RemoteIPType,
+        Direction = iff(isnotempty(RemoteIP) and ActionType has "Inbound", "Inbound", "Outbound")
+) on DeviceId
+| where abs(datetime_diff('minute', LogonTime, NetEvtTime)) <= 2
+| join kind=leftouter (
+    DeviceProcessEvents
+    | extend ProcEvtTime = Timestamp
+    | project
+        DeviceId,
+        ProcessId,
+        ProcessCreationTime,
+        ProcessCommandLine,
+        FileName,
+        AccountName,
+        InitiatingProcessId,
+        InitiatingProcessFileName
+) on $left.DeviceId == $right.DeviceId and $left.InitiatingProcessId == $right.ProcessId
+| where isnull(ProcessCreationTime) or abs(datetime_diff('minute', LogonTime, ProcessCreationTime)) <= 2
+| join kind=leftouter (
+    DeviceInfo
+    | project DeviceId, ExposureLevel, MachineGroup, DeviceName
+) on $left.DeviceId == $right.DeviceId
+| extend
+    RemoteIPClass = case(
+        isnotempty(RemoteIPType), RemoteIPType,
+        isnotempty(RemoteIP) and (RemoteIP startswith "10." or RemoteIP startswith "192.168." or RemoteIP matches regex @"^172\.(1[6-9]|2[0-9]|3[0-1])\."), "Private",
+        isnotempty(RemoteIP), "Public",
+        "Unknown"
+    )
+| project
+    Timestamp = LogonTime,
+    DeviceName,
+    Account = strcat(AccountDomain, "\\", AccountName),
+    AuthenticationPackage = Protocol,
+    FailureReason,
+    ProcessName = coalesce(InitiatingProcessFileName, FileName),
+    ProcessCommandLine = coalesce(InitiatingProcessCommandLine, ProcessCommandLine),
+    RemoteIP,
+    RemotePort,
+    LocalPort,
+    NetworkProtocol = Protocol1,
+    ConnectionDirection = Direction,
+    RemoteIPClass,
+    ExposureLevel,
+    MachineGroup
