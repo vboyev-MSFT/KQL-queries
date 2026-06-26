@@ -5,9 +5,12 @@ DeviceLogonEvents
 | extend ProcessName = InitiatingProcessFileName, ProcessId = InitiatingProcessId
 | project Timestamp, 
           TargetDevice = DeviceName, 
-          ProcessName, 
+          ProcessName,
           ProcessId, 
           RemoteIP, 
           IsInternetFacingClient = IsPublicIP, 
           FirewallAnomaly
 | where IsInternetFacingClient == "Yes"
+//|where RemoteIPType == "Public"
+|join DeviceNetworkEvents on RemoteIP
+|project DeviceName,RemoteIP, RemoteIP1, LocalPort, Protocol,InitiatingProcessCommandLine
