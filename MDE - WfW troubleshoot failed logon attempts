@@ -1,0 +1,13 @@
+DeviceLogonEvents
+| where ActionType contains "LogonFailed" and (Protocol contains "NTLM" or LogonType contains "Network")
+| extend IsPublicIP = iff(RemoteIPType =~ "Public" or (isnotempty(RemoteIP) and not(RemoteIP startswith "10." or RemoteIP startswith "192.168." or RemoteIP matches regex @"^172\.(1[6-9]|2[0-9]|3[0-1])\.")), "Yes", "No")
+| extend FirewallAnomaly = iff(IsPublicIP == "Yes" and LogonType =~ "Network", "Potentially misconfigured: Public NTLM logon attempt allowed", "")
+| extend ProcessName = InitiatingProcessFileName, ProcessId = InitiatingProcessId
+| project Timestamp, 
+          TargetDevice = DeviceName, 
+          ProcessName, 
+          ProcessId, 
+          RemoteIP, 
+          IsInternetFacingClient = IsPublicIP, 
+          FirewallAnomaly
+| where IsInternetFacingClient == "Yes"
